@@ -11,16 +11,29 @@ public class CooldownManager {
     private final int warpCooldownSeconds;
     private final int spawnCooldownSeconds;
     private final int backCooldownSeconds;
+    private final int vipHomeCooldownSeconds;
+    private final int vipWarpCooldownSeconds;
+    private final int vipSpawnCooldownSeconds;
+    private final int vipBackCooldownSeconds;
 
-    public CooldownManager(int homeCooldownSeconds, int warpCooldownSeconds, int spawnCooldownSeconds, int backCooldownSeconds) {
+    public CooldownManager(int homeCooldownSeconds, int warpCooldownSeconds, int spawnCooldownSeconds, int backCooldownSeconds,
+                          int vipHomeCooldownSeconds, int vipWarpCooldownSeconds, int vipSpawnCooldownSeconds, int vipBackCooldownSeconds) {
         this.homeCooldownSeconds = homeCooldownSeconds;
         this.warpCooldownSeconds = warpCooldownSeconds;
         this.spawnCooldownSeconds = spawnCooldownSeconds;
         this.backCooldownSeconds = backCooldownSeconds;
+        this.vipHomeCooldownSeconds = vipHomeCooldownSeconds;
+        this.vipWarpCooldownSeconds = vipWarpCooldownSeconds;
+        this.vipSpawnCooldownSeconds = vipSpawnCooldownSeconds;
+        this.vipBackCooldownSeconds = vipBackCooldownSeconds;
     }
 
     public boolean isOnCooldown(@Nonnull UUID player, @Nonnull String commandType) {
-        int cooldownSeconds = getCooldownSeconds(commandType);
+        return isOnCooldown(player, commandType, false);
+    }
+
+    public boolean isOnCooldown(@Nonnull UUID player, @Nonnull String commandType, boolean isVip) {
+        int cooldownSeconds = isVip ? getVipCooldownSeconds(commandType) : getCooldownSeconds(commandType);
         if (cooldownSeconds <= 0) {
             return false;
         }
@@ -36,7 +49,11 @@ public class CooldownManager {
     }
 
     public long getCooldownRemaining(@Nonnull UUID player, @Nonnull String commandType) {
-        int cooldownSeconds = getCooldownSeconds(commandType);
+        return getCooldownRemaining(player, commandType, false);
+    }
+
+    public long getCooldownRemaining(@Nonnull UUID player, @Nonnull String commandType, boolean isVip) {
+        int cooldownSeconds = isVip ? getVipCooldownSeconds(commandType) : getCooldownSeconds(commandType);
         if (cooldownSeconds <= 0) {
             return 0;
         }
@@ -53,7 +70,11 @@ public class CooldownManager {
     }
 
     public void setCooldown(@Nonnull UUID player, @Nonnull String commandType) {
-        int cooldownSeconds = getCooldownSeconds(commandType);
+        setCooldown(player, commandType, false);
+    }
+
+    public void setCooldown(@Nonnull UUID player, @Nonnull String commandType, boolean isVip) {
+        int cooldownSeconds = isVip ? getVipCooldownSeconds(commandType) : getCooldownSeconds(commandType);
         if (cooldownSeconds <= 0) {
             return;
         }
@@ -68,6 +89,16 @@ public class CooldownManager {
             case "warp" -> warpCooldownSeconds;
             case "spawn" -> spawnCooldownSeconds;
             case "back" -> backCooldownSeconds;
+            default -> 0;
+        };
+    }
+
+    private int getVipCooldownSeconds(@Nonnull String commandType) {
+        return switch (commandType) {
+            case "home" -> vipHomeCooldownSeconds;
+            case "warp" -> vipWarpCooldownSeconds;
+            case "spawn" -> vipSpawnCooldownSeconds;
+            case "back" -> vipBackCooldownSeconds;
             default -> 0;
         };
     }

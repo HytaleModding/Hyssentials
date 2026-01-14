@@ -6,7 +6,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 
 public class HyssentialsConfig {
-    public static final int CONFIG_VERSION = 2;
+    public static final int CONFIG_VERSION = 3;
 
     public static final BuilderCodec<HyssentialsConfig> CODEC = BuilderCodec
         .builder(HyssentialsConfig.class, HyssentialsConfig::new)
@@ -20,6 +20,12 @@ public class HyssentialsConfig {
         .append(new KeyedCodec<>("WarpCooldownSeconds", Codec.INTEGER), HyssentialsConfig::setWarpCooldownSeconds, HyssentialsConfig::getWarpCooldownSeconds).add()
         .append(new KeyedCodec<>("SpawnCooldownSeconds", Codec.INTEGER), HyssentialsConfig::setSpawnCooldownSeconds, HyssentialsConfig::getSpawnCooldownSeconds).add()
         .append(new KeyedCodec<>("BackCooldownSeconds", Codec.INTEGER), HyssentialsConfig::setBackCooldownSeconds, HyssentialsConfig::getBackCooldownSeconds).add()
+        // VIP settings
+        .append(new KeyedCodec<>("VipMaxHomes", Codec.INTEGER), HyssentialsConfig::setVipMaxHomes, HyssentialsConfig::getVipMaxHomes).add()
+        .append(new KeyedCodec<>("VipHomeCooldownSeconds", Codec.INTEGER), HyssentialsConfig::setVipHomeCooldownSeconds, HyssentialsConfig::getVipHomeCooldownSeconds).add()
+        .append(new KeyedCodec<>("VipWarpCooldownSeconds", Codec.INTEGER), HyssentialsConfig::setVipWarpCooldownSeconds, HyssentialsConfig::getVipWarpCooldownSeconds).add()
+        .append(new KeyedCodec<>("VipSpawnCooldownSeconds", Codec.INTEGER), HyssentialsConfig::setVipSpawnCooldownSeconds, HyssentialsConfig::getVipSpawnCooldownSeconds).add()
+        .append(new KeyedCodec<>("VipBackCooldownSeconds", Codec.INTEGER), HyssentialsConfig::setVipBackCooldownSeconds, HyssentialsConfig::getVipBackCooldownSeconds).add()
         .build();
 
     private int configVersion = CONFIG_VERSION;
@@ -32,6 +38,12 @@ public class HyssentialsConfig {
     private int warpCooldownSeconds = 60;
     private int spawnCooldownSeconds = 60;
     private int backCooldownSeconds = 60;
+    // VIP settings
+    private int vipMaxHomes = 10;
+    private int vipHomeCooldownSeconds = 0;
+    private int vipWarpCooldownSeconds = 0;
+    private int vipSpawnCooldownSeconds = 0;
+    private int vipBackCooldownSeconds = 0;
 
     public HyssentialsConfig() {
     }
@@ -114,5 +126,45 @@ public class HyssentialsConfig {
 
     public void setBackCooldownSeconds(int backCooldownSeconds) {
         this.backCooldownSeconds = backCooldownSeconds;
+    }
+
+    public int getVipMaxHomes() {
+        return vipMaxHomes;
+    }
+
+    public void setVipMaxHomes(int vipMaxHomes) {
+        this.vipMaxHomes = vipMaxHomes;
+    }
+
+    public int getVipHomeCooldownSeconds() {
+        return vipHomeCooldownSeconds;
+    }
+
+    public void setVipHomeCooldownSeconds(int vipHomeCooldownSeconds) {
+        this.vipHomeCooldownSeconds = vipHomeCooldownSeconds;
+    }
+
+    public int getVipWarpCooldownSeconds() {
+        return vipWarpCooldownSeconds;
+    }
+
+    public void setVipWarpCooldownSeconds(int vipWarpCooldownSeconds) {
+        this.vipWarpCooldownSeconds = vipWarpCooldownSeconds;
+    }
+
+    public int getVipSpawnCooldownSeconds() {
+        return vipSpawnCooldownSeconds;
+    }
+
+    public void setVipSpawnCooldownSeconds(int vipSpawnCooldownSeconds) {
+        this.vipSpawnCooldownSeconds = vipSpawnCooldownSeconds;
+    }
+
+    public int getVipBackCooldownSeconds() {
+        return vipBackCooldownSeconds;
+    }
+
+    public void setVipBackCooldownSeconds(int vipBackCooldownSeconds) {
+        this.vipBackCooldownSeconds = vipBackCooldownSeconds;
     }
 }

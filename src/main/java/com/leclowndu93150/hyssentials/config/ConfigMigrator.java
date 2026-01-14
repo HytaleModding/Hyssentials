@@ -43,6 +43,9 @@ public class ConfigMigrator {
             if (currentVersion < 2) {
                 migrateV1ToV2(json);
             }
+            if (currentVersion < 3) {
+                migrateV2ToV3(json);
+            }
 
             json.addProperty("ConfigVersion", HyssentialsConfig.CONFIG_VERSION);
 
@@ -76,6 +79,30 @@ public class ConfigMigrator {
         if (!json.has("BackCooldownSeconds")) {
             json.addProperty("BackCooldownSeconds", 60);
             logger.atInfo().log("Added BackCooldownSeconds with default value 60");
+        }
+    }
+
+    private void migrateV2ToV3(@Nonnull JsonObject json) {
+        // Add VIP settings
+        if (!json.has("VipMaxHomes")) {
+            json.addProperty("VipMaxHomes", 10);
+            logger.atInfo().log("Added VipMaxHomes with default value 10");
+        }
+        if (!json.has("VipHomeCooldownSeconds")) {
+            json.addProperty("VipHomeCooldownSeconds", 0);
+            logger.atInfo().log("Added VipHomeCooldownSeconds with default value 0 (no cooldown)");
+        }
+        if (!json.has("VipWarpCooldownSeconds")) {
+            json.addProperty("VipWarpCooldownSeconds", 0);
+            logger.atInfo().log("Added VipWarpCooldownSeconds with default value 0 (no cooldown)");
+        }
+        if (!json.has("VipSpawnCooldownSeconds")) {
+            json.addProperty("VipSpawnCooldownSeconds", 0);
+            logger.atInfo().log("Added VipSpawnCooldownSeconds with default value 0 (no cooldown)");
+        }
+        if (!json.has("VipBackCooldownSeconds")) {
+            json.addProperty("VipBackCooldownSeconds", 0);
+            logger.atInfo().log("Added VipBackCooldownSeconds with default value 0 (no cooldown)");
         }
     }
 

@@ -20,6 +20,7 @@ import com.leclowndu93150.hyssentials.data.LocationData;
 import com.leclowndu93150.hyssentials.manager.BackManager;
 import com.leclowndu93150.hyssentials.manager.CooldownManager;
 import com.leclowndu93150.hyssentials.manager.WarpManager;
+import com.leclowndu93150.hyssentials.util.Permissions;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -46,9 +47,11 @@ public class WarpCommand extends AbstractPlayerCommand {
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
         String name = nameArg.get(context);
         UUID playerUuid = playerRef.getUuid();
+        boolean isVip = Permissions.hasVipCooldown(playerRef);
+        boolean bypassCooldown = Permissions.canBypassCooldown(playerRef);
 
-        if (cooldownManager.isOnCooldown(playerUuid, CooldownManager.WARP)) {
-            long remaining = cooldownManager.getCooldownRemaining(playerUuid, CooldownManager.WARP);
+        if (!bypassCooldown && cooldownManager.isOnCooldown(playerUuid, CooldownManager.WARP, isVip)) {
+            long remaining = cooldownManager.getCooldownRemaining(playerUuid, CooldownManager.WARP, isVip);
             context.sendMessage(Message.raw(String.format("You must wait %d seconds before using /warp again.", remaining)));
             return;
         }
@@ -73,7 +76,9 @@ public class WarpCommand extends AbstractPlayerCommand {
         world.execute(() -> {
             Teleport teleport = new Teleport(finalWorld, warp.toPosition(), warp.toRotation());
             store.addComponent(ref, Teleport.getComponentType(), teleport);
-            cooldownManager.setCooldown(playerUuid, CooldownManager.WARP);
+            if (!bypassCooldown) {
+                cooldownManager.setCooldown(playerUuid, CooldownManager.WARP, isVip);
+            }
             context.sendMessage(Message.raw(String.format(
                 "Teleporting to warp '%s' at %.1f, %.1f, %.1f",
                 name, warp.x(), warp.y(), warp.z())));

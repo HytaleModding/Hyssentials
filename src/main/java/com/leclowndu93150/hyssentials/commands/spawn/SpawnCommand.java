@@ -20,6 +20,7 @@ import com.leclowndu93150.hyssentials.data.LocationData;
 import com.leclowndu93150.hyssentials.manager.BackManager;
 import com.leclowndu93150.hyssentials.manager.CooldownManager;
 import com.leclowndu93150.hyssentials.manager.SpawnManager;
+import com.leclowndu93150.hyssentials.util.Permissions;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -44,9 +45,11 @@ public class SpawnCommand extends AbstractPlayerCommand {
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
         UUID playerUuid = playerRef.getUuid();
+        boolean isVip = Permissions.hasVipCooldown(playerRef);
+        boolean bypassCooldown = Permissions.canBypassCooldown(playerRef);
 
-        if (cooldownManager.isOnCooldown(playerUuid, CooldownManager.SPAWN)) {
-            long remaining = cooldownManager.getCooldownRemaining(playerUuid, CooldownManager.SPAWN);
+        if (!bypassCooldown && cooldownManager.isOnCooldown(playerUuid, CooldownManager.SPAWN, isVip)) {
+            long remaining = cooldownManager.getCooldownRemaining(playerUuid, CooldownManager.SPAWN, isVip);
             context.sendMessage(Message.raw(String.format("You must wait %d seconds before using /spawn again.", remaining)));
             return;
         }
@@ -67,7 +70,9 @@ public class SpawnCommand extends AbstractPlayerCommand {
             World finalWorld = targetWorld;
             Teleport teleport = new Teleport(finalWorld, customSpawn.toPosition(), customSpawn.toRotation());
             store.addComponent(ref, Teleport.getComponentType(), teleport);
-            cooldownManager.setCooldown(playerUuid, CooldownManager.SPAWN);
+            if (!bypassCooldown) {
+                cooldownManager.setCooldown(playerUuid, CooldownManager.SPAWN, isVip);
+            }
             context.sendMessage(Message.raw(String.format(
                 "Teleporting to spawn at %.1f, %.1f, %.1f",
                 customSpawn.x(), customSpawn.y(), customSpawn.z())));
@@ -79,7 +84,9 @@ public class SpawnCommand extends AbstractPlayerCommand {
         Vector3f rotation = spawn.getRotation();
         Teleport teleport = new Teleport(world, position, rotation);
         store.addComponent(ref, Teleport.getComponentType(), teleport);
-        cooldownManager.setCooldown(playerUuid, CooldownManager.SPAWN);
+        if (!bypassCooldown) {
+            cooldownManager.setCooldown(playerUuid, CooldownManager.SPAWN, isVip);
+        }
         context.sendMessage(Message.raw(String.format(
             "Teleporting to world spawn at %.1f, %.1f, %.1f",
             position.getX(), position.getY(), position.getZ())));

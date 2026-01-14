@@ -58,7 +58,7 @@ public class HyssentialsPlugin extends JavaPlugin {
         this.config.save();
         this.dataManager = new DataManager(this.getDataDirectory(), this.getLogger());
         this.tpaManager = new TpaManager(cfg.getTpaTimeout(), cfg.getTpaCooldown());
-        this.homeManager = new HomeManager(this.dataManager, cfg.getMaxHomes());
+        this.homeManager = new HomeManager(this.dataManager, cfg.getMaxHomes(), cfg.getVipMaxHomes());
         this.warpManager = new WarpManager(this.dataManager);
         this.spawnManager = new SpawnManager(this.dataManager);
         this.backManager = new BackManager(cfg.getBackHistorySize());
@@ -66,7 +66,11 @@ public class HyssentialsPlugin extends JavaPlugin {
             cfg.getHomeCooldownSeconds(),
             cfg.getWarpCooldownSeconds(),
             cfg.getSpawnCooldownSeconds(),
-            cfg.getBackCooldownSeconds()
+            cfg.getBackCooldownSeconds(),
+            cfg.getVipHomeCooldownSeconds(),
+            cfg.getVipWarpCooldownSeconds(),
+            cfg.getVipSpawnCooldownSeconds(),
+            cfg.getVipBackCooldownSeconds()
         );
         this.getEntityStoreRegistry().registerSystem(new PlayerDeathBackSystem(this.backManager));
     }
