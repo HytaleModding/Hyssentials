@@ -33,7 +33,7 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
 public class HyssentialsPlugin extends JavaPlugin {
-    private final Config<HyssentialsConfig> config = this.withConfig(HyssentialsConfig.CODEC);
+    private final Config<HyssentialsConfig> config = this.withConfig("config", HyssentialsConfig.CODEC);
     private DataManager dataManager;
     private TpaManager tpaManager;
     private HomeManager homeManager;
@@ -48,6 +48,7 @@ public class HyssentialsPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         HyssentialsConfig cfg = this.config.get();
+        this.config.save();
         this.dataManager = new DataManager(this.getDataDirectory(), this.getLogger());
         this.tpaManager = new TpaManager(cfg.getTpaTimeout(), cfg.getTpaCooldown());
         this.homeManager = new HomeManager(this.dataManager, cfg.getMaxHomes());
