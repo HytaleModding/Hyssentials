@@ -16,7 +16,21 @@ public record LocationData(
         return new Vector3d(x, y + 1.0, z);
     }
 
-    public Vector3f toRotation() {
+    /**
+     * Returns body rotation for the Teleport component.
+     * Body rotation only uses yaw (horizontal facing direction), pitch is 0.
+     * Vector3f constructor is (pitch, yaw, roll).
+     */
+    public Vector3f toBodyRotation() {
+        return new Vector3f(0.0f, yaw, 0.0f);
+    }
+
+    /**
+     * Returns head rotation for the Teleport.withHeadRotation() call.
+     * Head rotation uses both pitch (vertical look) and yaw (horizontal look).
+     * Vector3f constructor is (pitch, yaw, roll).
+     */
+    public Vector3f toHeadRotation() {
         return new Vector3f(pitch, yaw, 0.0f);
     }
 

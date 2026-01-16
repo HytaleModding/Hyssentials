@@ -61,6 +61,8 @@ public class TphereCommand extends AbstractPlayerCommand {
         }
         Vector3d myPos = myTransform.getPosition().clone();
         Vector3f myRot = myHeadRot != null ? myHeadRot.getRotation().clone() : new Vector3f(0, 0, 0);
+        // Get body rotation for the teleport
+        Vector3f myBodyRot = myTransform.getRotation().clone();
         targetWorld.execute(() -> {
             TransformComponent targetTransform = targetStore.getComponent(targetRef, TransformComponent.getComponentType());
             HeadRotation targetHeadRot = targetStore.getComponent(targetRef, HeadRotation.getComponentType());
@@ -69,7 +71,10 @@ public class TphereCommand extends AbstractPlayerCommand {
                 Vector3f targetRot = targetHeadRot != null ? targetHeadRot.getRotation().clone() : new Vector3f(0, 0, 0);
                 backManager.saveLocation(targetPlayer.getUuid(), LocationData.from(targetWorld.getName(), targetPos, targetRot));
             }
-            Teleport teleport = new Teleport(world, myPos, myRot);
+            // Use proper body and head rotation like vanilla Hytale
+            Teleport teleport = new Teleport(world, myPos, myBodyRot)
+                .withHeadRotation(myRot)
+                .withResetRoll();
             targetStore.addComponent(targetRef, Teleport.getComponentType(), teleport);
             targetPlayer.sendMessage(Message.raw(String.format("You have been teleported to %s.", playerRef.getUsername())));
         });

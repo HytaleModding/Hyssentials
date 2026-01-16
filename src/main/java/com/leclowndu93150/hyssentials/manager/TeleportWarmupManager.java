@@ -175,7 +175,9 @@ public class TeleportWarmupManager {
 
         finalWorld.getChunkStore().getChunkReferenceAsync(chunkIndex).thenAccept(chunkRef -> {
             currentWorld.execute(() -> {
-                Teleport teleport = new Teleport(finalWorld, destination.toPosition(), destination.toRotation());
+                Teleport teleport = new Teleport(finalWorld, destination.toPosition(), destination.toBodyRotation())
+                    .withHeadRotation(destination.toHeadRotation())
+                    .withResetRoll();
                 store.addComponent(ref, Teleport.getComponentType(), teleport);
 
                 cooldownManager.setCooldown(playerUuid, commandType);

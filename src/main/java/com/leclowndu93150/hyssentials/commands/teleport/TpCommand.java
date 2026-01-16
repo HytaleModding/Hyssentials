@@ -72,9 +72,13 @@ public class TpCommand extends AbstractPlayerCommand {
                 return;
             }
             Vector3d targetPos = targetTransform.getPosition().clone();
-            Vector3f targetRot = targetHeadRot != null ? targetHeadRot.getRotation().clone() : new Vector3f(0, 0, 0);
+            Vector3f targetBodyRot = targetTransform.getRotation().clone();
+            Vector3f targetHeadRotation = targetHeadRot != null ? targetHeadRot.getRotation().clone() : new Vector3f(0, 0, 0);
             world.execute(() -> {
-                Teleport teleport = new Teleport(targetWorld, targetPos, targetRot);
+                // Use proper body and head rotation like vanilla Hytale
+                Teleport teleport = new Teleport(targetWorld, targetPos, targetBodyRot)
+                    .withHeadRotation(targetHeadRotation)
+                    .withResetRoll();
                 store.addComponent(ref, Teleport.getComponentType(), teleport);
                 context.sendMessage(Message.raw(String.format("Teleporting to %s.", targetPlayer.getUsername())));
             });
