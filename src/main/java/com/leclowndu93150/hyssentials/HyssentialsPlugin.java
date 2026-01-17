@@ -38,7 +38,11 @@ import com.leclowndu93150.hyssentials.manager.TpaManager;
 import com.leclowndu93150.hyssentials.manager.WarpManager;
 import com.leclowndu93150.hyssentials.manager.PrivateMessageManager;
 import com.leclowndu93150.hyssentials.manager.AdminChatManager;
+import com.leclowndu93150.hyssentials.manager.VanishManager;
+import com.leclowndu93150.hyssentials.commands.admin.VanishCommand;
 import com.leclowndu93150.hyssentials.system.PlayerDeathBackSystem;
+import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
@@ -54,6 +58,7 @@ public class HyssentialsPlugin extends JavaPlugin {
     private TeleportWarmupManager warmupManager;
     private PrivateMessageManager msgManager;
     private AdminChatManager adminChatManager;
+    private VanishManager vanishManager;
 
     public HyssentialsPlugin(@Nonnull JavaPluginInit init) {
         super(init);
@@ -77,8 +82,13 @@ public class HyssentialsPlugin extends JavaPlugin {
         this.warpManager = new WarpManager(this.dataManager);
         this.msgManager = new PrivateMessageManager();
         this.adminChatManager = new AdminChatManager(this.getDataDirectory(), this.getLogger());
+        this.vanishManager = new VanishManager();
 
         this.getEntityStoreRegistry().registerSystem(new PlayerDeathBackSystem(this.backManager));
+
+        // Register player connect/disconnect events for vanish
+        this.getEventRegistry().register(PlayerConnectEvent.class, this::onPlayerConnect);
+        this.getEventRegistry().register(PlayerDisconnectEvent.class, this::onPlayerDisconnect);
     }
 
     @Override
@@ -106,7 +116,16 @@ public class HyssentialsPlugin extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new MsgCommand(this.msgManager));
         this.getCommandRegistry().registerCommand(new ReplyCommand(this.msgManager));
         this.getCommandRegistry().registerCommand(new AdminChatCommand(this.adminChatManager));
+        this.getCommandRegistry().registerCommand(new VanishCommand(this.vanishManager));
         this.getLogger().at(Level.INFO).log("Hyssentials loaded with rank system!");
+    }
+
+    private void onPlayerConnect(@Nonnull PlayerConnectEvent event) {
+        vanishManager.onPlayerJoin(event.getPlayerRef());
+    }
+
+    private void onPlayerDisconnect(@Nonnull PlayerDisconnectEvent event) {
+        vanishManager.onPlayerLeave(event.getPlayerRef().getUuid());
     }
 
     @Override

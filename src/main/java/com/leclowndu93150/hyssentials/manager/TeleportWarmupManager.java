@@ -171,7 +171,7 @@ public class TeleportWarmupManager {
         World finalWorld = targetWorld;
         long chunkIndex = ChunkUtil.indexChunkFromBlock((int) destination.x(), (int) destination.z());
 
-        finalWorld.getChunkStore().getChunkReferenceAsync(chunkIndex, 9).thenAccept(chunkRef -> {
+        finalWorld.getChunkStore().getChunkReferenceAsync(chunkIndex, 0).thenAccept(chunkRef -> {
             currentWorld.execute(() -> {
                 Teleport teleport = new Teleport(finalWorld, destination.toPosition(), destination.toBodyRotation())
                     .setHeadRotation(destination.toHeadRotation());
