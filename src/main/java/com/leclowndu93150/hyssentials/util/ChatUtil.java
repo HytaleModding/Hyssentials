@@ -21,15 +21,15 @@ import javax.annotation.Nullable;
  * Falls back to vanilla Message formatting if ChatCustomization is not installed.
  *
  * Supports MiniMessage-style tags:
- * - &lt;red&gt;text&lt;/red&gt; - red (#FF5555)
- * - &lt;green&gt;text&lt;/green&gt; - green (#55FF55)
- * - &lt;yellow&gt;text&lt;/yellow&gt; - yellow (#FFFF55)
- * - &lt;gray&gt;text&lt;/gray&gt; - gray (#AAAAAA)
- * - &lt;orange&gt;text&lt;/orange&gt; - orange (#FFAA00)
- * - &lt;#RRGGBB&gt;text&lt;/#RRGGBB&gt; - custom hex color
- * - &lt;bold&gt;text&lt;/bold&gt; or &lt;b&gt;text&lt;/b&gt;
- * - &lt;italic&gt;text&lt;/italic&gt; or &lt;i&gt;text&lt;/i&gt;
- * - &lt;underline&gt;text&lt;/underline&gt; or &lt;u&gt;text&lt;/u&gt;
+ * - <red>text</red> - red (#FF5555)
+ * - <green>text</green> - green (#55FF55)
+ * - <yellow>text</yellow> - yellow (#FFFF55)
+ * - <gray>text</gray> - gray (#AAAAAA)
+ * - <orange>text</orange> - orange (#FFAA00)
+ * - <#RRGGBB>text</#RRGGBB> - custom hex color
+ * - <bold>text</bold> or <b>text</b>
+ * - <italic>text</italic> or <i>text</i>
+ * - <underline>text</underline> or <u>text</u>
  */
 public final class ChatUtil {
     private static final PluginIdentifier CHAT_CUSTOMIZATION_ID = new PluginIdentifier("com.leclowndu93150", "ChatCustomization");
@@ -108,15 +108,15 @@ public final class ChatUtil {
     /**
      * Parses a string with MiniMessage-style tags and returns a formatted Message.
      * Supports:
-     * - &lt;red&gt;text&lt;/red&gt; - red (#FF5555)
-     * - &lt;green&gt;text&lt;/green&gt; - green (#55FF55)
-     * - &lt;yellow&gt;text&lt;/yellow&gt; - yellow (#FFFF55)
-     * - &lt;gray&gt;text&lt;/gray&gt; - gray (#AAAAAA)
-     * - &lt;orange&gt;text&lt;/orange&gt; - orange (#FFAA00)
-     * - &lt;#RRGGBB&gt;text&lt;/#RRGGBB&gt; - custom hex color
-     * - &lt;bold&gt;text&lt;/bold&gt; or &lt;b&gt;text&lt;/b&gt;
-     * - &lt;italic&gt;text&lt;/italic&gt; or &lt;i&gt;text&lt;/i&gt;
-     * - &lt;underline&gt;text&lt;/underline&gt; or &lt;u&gt;text&lt;/u&gt;
+     * - <red>text</red> - red (#FF5555)
+     * - <green>text</green> - green (#55FF55)
+     * - <yellow>text</yellow> - yellow (#FFFF55)
+     * - <gray>text</gray> - gray (#AAAAAA)
+     * - <orange>text</orange> - orange (#FFAA00)
+     * - <#RRGGBB>text</#RRGGBB> - custom hex color
+     * - <bold>text</bold> or <b>text</b>
+     * - <italic>text</italic> or <i>text</i>
+     * - <underline>text</underline> or <u>text</u>
      */
     @Nonnull
     public static Message parse(@Nonnull String text) {
