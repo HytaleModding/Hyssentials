@@ -179,7 +179,7 @@ public class HyssentialsPlugin extends JavaPlugin {
             if (universe == null) {
                 return;
             }
-            for (PlayerRef player : universe.getOnlinePlayers()) {
+            for (PlayerRef player : universe.getPlayers()) {
                 rankManager.ensureGrantedPermissions(player.getUuid());
             }
         } catch (Exception e) {
