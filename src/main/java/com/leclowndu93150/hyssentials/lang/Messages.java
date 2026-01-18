@@ -48,6 +48,8 @@ public enum Messages {
     ERROR_NO_TPA_TO_CANCEL("error.no_tpa_to_cancel"),
     ERROR_WARMUP_FAILED("error.warmup_failed"),
     ERROR_CHUNK_LOAD_FAILED("error.chunk_load_failed"),
+    ERROR_INSTANCE_WORLD_HOME("error.instance_world_home"),
+    ERROR_INSTANCE_WORLD_WARP("error.instance_world_warp"),
 
     // ============ COOLDOWN MESSAGES ============
     COOLDOWN_HOME("cooldown.home"),

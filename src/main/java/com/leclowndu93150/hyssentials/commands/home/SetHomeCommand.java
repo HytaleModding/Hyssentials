@@ -39,6 +39,10 @@ public class SetHomeCommand extends AbstractPlayerCommand {
     @Override
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
+        if (world.getName().startsWith("instance-")) {
+            context.sendMessage(ChatUtil.parse(Messages.ERROR_INSTANCE_WORLD_HOME));
+            return;
+        }
         String name = nameArg.get(context);
         UUID playerUuid = playerRef.getUuid();
         TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());

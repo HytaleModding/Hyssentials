@@ -62,13 +62,28 @@ public class DataManager {
         Type type = new TypeToken<Map<String, Map<String, LocationData>>>(){}.getType();
         Map<String, Map<String, LocationData>> stringMap = loadData("homes.json", type);
         Map<UUID, Map<String, LocationData>> result = new ConcurrentHashMap<>();
+        int removedCount = 0;
         for (Map.Entry<String, Map<String, LocationData>> entry : stringMap.entrySet()) {
             try {
                 UUID uuid = UUID.fromString(entry.getKey());
-                result.put(uuid, new ConcurrentHashMap<>(entry.getValue()));
+                Map<String, LocationData> filteredHomes = new ConcurrentHashMap<>();
+                for (Map.Entry<String, LocationData> homeEntry : entry.getValue().entrySet()) {
+                    if (homeEntry.getValue().worldName() != null &&
+                        homeEntry.getValue().worldName().startsWith("instance-")) {
+                        removedCount++;
+                    } else {
+                        filteredHomes.put(homeEntry.getKey(), homeEntry.getValue());
+                    }
+                }
+                if (!filteredHomes.isEmpty()) {
+                    result.put(uuid, filteredHomes);
+                }
             } catch (IllegalArgumentException e) {
                 logger.atWarning().log("Invalid UUID in homes file: %s", entry.getKey());
             }
+        }
+        if (removedCount > 0) {
+            logger.atInfo().log("Removed %d homes in instance worlds (temporary worlds)", removedCount);
         }
         return result;
     }
@@ -84,7 +99,21 @@ public class DataManager {
 
     public Map<String, LocationData> loadWarps() {
         Type type = new TypeToken<Map<String, LocationData>>(){}.getType();
-        return loadData("warps.json", type);
+        Map<String, LocationData> loaded = loadData("warps.json", type);
+        Map<String, LocationData> filtered = new ConcurrentHashMap<>();
+        int removedCount = 0;
+        for (Map.Entry<String, LocationData> entry : loaded.entrySet()) {
+            if (entry.getValue().worldName() != null &&
+                entry.getValue().worldName().startsWith("instance-")) {
+                removedCount++;
+            } else {
+                filtered.put(entry.getKey(), entry.getValue());
+            }
+        }
+        if (removedCount > 0) {
+            logger.atInfo().log("Removed %d warps in instance worlds (temporary worlds)", removedCount);
+        }
+        return filtered;
     }
 
     public void saveWarps(Map<String, LocationData> warps) {

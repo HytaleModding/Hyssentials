@@ -41,7 +41,9 @@
     "already_pending_tpa": "<red>Vous avez déjà une demande en attente vers ce joueur.</red>",
     "no_tpa_to_cancel": "<red>Vous n'avez aucune demande de téléportation à annuler.</red>",
     "warmup_failed": "<red>Échec du démarrage de la téléportation.</red>",
-    "chunk_load_failed": "<red>Échec du chargement du chunk de destination. Téléportation annulée.</red>"
+    "chunk_load_failed": "<red>Échec du chargement du chunk de destination. Téléportation annulée.</red>",
+    "instance_world_home": "<red>Vous ne pouvez pas définir un home dans un monde instance. Les mondes instances sont temporaires et seront détruits quand vous partirez.</red>",
+    "instance_world_warp": "<red>Vous ne pouvez pas définir un warp dans un monde instance. Les mondes instances sont temporaires et seront détruits quand vous partirez.</red>"
   },
   "cooldown": {
     "home": "<orange>Vous devez attendre <yellow>%d</yellow> secondes avant d'utiliser /home à nouveau.</orange>",

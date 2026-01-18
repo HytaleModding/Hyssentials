@@ -413,6 +413,7 @@
                 <a href="#ranks-json" class="nav-link">ranks.json</a>
                 <a href="#adminchat-json" class="nav-link">adminchat.json</a>
                 <a href="#joinmessages-json" class="nav-link">joinmessages.json</a>
+                <a href="#language" class="nav-link">Language Files</a>
                 <a href="#formatting-guide" class="nav-link">Formatting Guide</a>
                 <a href="#permissions" class="nav-link">Permissions</a>
             </div>
@@ -619,6 +620,11 @@
 
                 <h4>Home Limits</h4>
                 <p>The number of homes a player can set is determined by their rank. Default players get 5 homes, while VIP players get 10. This is fully customizable in the rank settings.</p>
+
+                <div class="callout callout-warning">
+                    <div class="callout-title">Instance Worlds</div>
+                    <p>Homes cannot be set in instance worlds (worlds starting with <code>instance-</code>). Instance worlds are temporary and are destroyed when you leave, so any homes set there would become invalid. Existing homes in instance worlds are automatically removed when the plugin loads.</p>
+                </div>
             </section>
 
             <!-- Warps -->
@@ -668,6 +674,11 @@
 
                 <img src="images/warp-list.png" alt="Warp Selection Screen" class="screenshot">
                 <p class="image-caption">Browse and teleport to server warps from the UI</p>
+
+                <div class="callout callout-warning">
+                    <div class="callout-title">Instance Worlds</div>
+                    <p>Warps cannot be set in instance worlds (worlds starting with <code>instance-</code>). Instance worlds are temporary and are destroyed when players leave, so any warps set there would become invalid. Existing warps in instance worlds are automatically removed when the plugin loads.</p>
+                </div>
             </section>
 
             <!-- Spawn -->
@@ -1308,6 +1319,97 @@
                 <div class="callout callout-info">
                     <div class="callout-title">Note</div>
                     <p>This feature is disabled by default. Set <code>enabled</code> to <code>true</code> to use your custom messages instead of Hytale's built-in join/leave announcements.</p>
+                </div>
+            </section>
+
+            <!-- Language Files -->
+            <section id="language" class="section">
+                <h2>Language Files</h2>
+                <p>Hyssentials supports multiple languages through JSON language files located in the <code>lang</code> folder inside the plugin JAR. Currently supported languages:</p>
+
+                <ul>
+                    <li><code>en.json</code> - English (default)</li>
+                    <li><code>fr.json</code> - French</li>
+                </ul>
+
+                <h3>Message Categories</h3>
+                <p>Language files contain all user-facing messages organized by category:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>error</code></td>
+                            <td>Error messages (permissions, not found, etc.)</td>
+                        </tr>
+                        <tr>
+                            <td><code>cooldown</code></td>
+                            <td>Cooldown notification messages</td>
+                        </tr>
+                        <tr>
+                            <td><code>success</code></td>
+                            <td>Success/confirmation messages</td>
+                        </tr>
+                        <tr>
+                            <td><code>info</code></td>
+                            <td>Informational messages (warmups, lists, etc.)</td>
+                        </tr>
+                        <tr>
+                            <td><code>usage</code></td>
+                            <td>Command usage hints</td>
+                        </tr>
+                        <tr>
+                            <td><code>pm</code></td>
+                            <td>Private message formatting</td>
+                        </tr>
+                        <tr>
+                            <td><code>ui</code></td>
+                            <td>GUI text (titles, buttons, labels)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Example Message Structure</h3>
+<pre><code>{
+  "error": {
+    "no_permission": {
+      "home": "&lt;red&gt;You don't have permission to use /home.&lt;/red&gt;",
+      "warp": "&lt;red&gt;You don't have permission to use /warp.&lt;/red&gt;"
+    },
+    "home_not_found": "&lt;red&gt;Home '&lt;yellow&gt;%s&lt;/yellow&gt;' not found.&lt;/red&gt;",
+    "instance_world_home": "&lt;red&gt;You cannot set a home in an instance world. Instance worlds are temporary and will be destroyed when you leave.&lt;/red&gt;"
+  },
+  "success": {
+    "home_set": "&lt;green&gt;Home '&lt;yellow&gt;%s&lt;/yellow&gt;' set at &lt;gray&gt;%.1f, %.1f, %.1f&lt;/gray&gt;&lt;/green&gt;"
+  }
+}</code></pre>
+
+                <h3>Placeholders</h3>
+                <p>Messages use Java's <code>String.format()</code> placeholders:</p>
+                <ul>
+                    <li><code>%s</code> - String (player names, home names, etc.)</li>
+                    <li><code>%d</code> - Integer (cooldown seconds, counts, etc.)</li>
+                    <li><code>%.1f</code> - Decimal with 1 decimal place (coordinates)</li>
+                </ul>
+
+                <h3>Color Tags</h3>
+                <p>Messages support MiniMessage-style color tags:</p>
+                <ul>
+                    <li><code>&lt;red&gt;text&lt;/red&gt;</code> - Red text</li>
+                    <li><code>&lt;green&gt;text&lt;/green&gt;</code> - Green text</li>
+                    <li><code>&lt;yellow&gt;text&lt;/yellow&gt;</code> - Yellow text</li>
+                    <li><code>&lt;orange&gt;text&lt;/orange&gt;</code> - Orange text</li>
+                    <li><code>&lt;gray&gt;text&lt;/gray&gt;</code> - Gray text</li>
+                </ul>
+
+                <div class="callout callout-info">
+                    <div class="callout-title">Adding Languages</div>
+                    <p>To add a new language, create a new JSON file (e.g., <code>de.json</code> for German) following the same structure as <code>en.json</code>. The plugin will automatically detect and load available language files.</p>
                 </div>
             </section>
 

@@ -41,7 +41,9 @@
     "already_pending_tpa": "<red>You already have a pending request to this player.</red>",
     "no_tpa_to_cancel": "<red>You have no pending teleport requests to cancel.</red>",
     "warmup_failed": "<red>Failed to start teleport warmup.</red>",
-    "chunk_load_failed": "<red>Failed to load destination chunk. Teleport cancelled.</red>"
+    "chunk_load_failed": "<red>Failed to load destination chunk. Teleport cancelled.</red>",
+    "instance_world_home": "<red>You cannot set a home in an instance world. Instance worlds are temporary and will be destroyed when you leave.</red>",
+    "instance_world_warp": "<red>You cannot set a warp in an instance world. Instance worlds are temporary and will be destroyed when you leave.</red>"
   },
   "cooldown": {
     "home": "<orange>You must wait <yellow>%d</yellow> seconds before using /home again.</orange>",
@@ -78,7 +80,7 @@
   },
   "info": {
     "vanish_reminder": "<gray>Reminder: You are currently vanished. Other players cannot see you.</gray>",
-    "rtp_searching": "<gray>Searching for a safe location...</gray>",
+    "rtp_searching": "<gray>Searching for a safe location... It may take 1+ minutes.</gray>",
     "warmup_started": "<orange>Teleporting to <yellow>%s</yellow> in <yellow>%d</yellow> seconds... Don't move!</orange>",
     "warmup_cancelled": "<orange>Teleport cancelled - you moved!</orange>",
     "tpa_request_received": "<orange><yellow>%s</yellow> has requested to teleport to you. Type <yellow>/tpaccept</yellow> to accept or <yellow>/tpdeny</yellow> to deny. Expires in <yellow>%d</yellow> seconds.</orange>",

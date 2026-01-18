@@ -37,6 +37,10 @@ public class SetWarpCommand extends AbstractPlayerCommand {
     @Override
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
+        if (world.getName().startsWith("instance-")) {
+            context.sendMessage(ChatUtil.parse(Messages.ERROR_INSTANCE_WORLD_WARP));
+            return;
+        }
         String name = nameArg.get(context);
         TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
         if (transform == null) {
