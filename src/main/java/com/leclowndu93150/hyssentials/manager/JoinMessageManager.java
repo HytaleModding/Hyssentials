@@ -29,7 +29,8 @@ public class JoinMessageManager {
     private final Path dataDirectory;
     private final HytaleLogger logger;
     private JoinMessageConfig config;
-    private final Set<UUID> connectedPlayers = new HashSet<>();
+    private final Set<UUID> justConnected = new HashSet<>();
+    private final Set<UUID> disconnecting = new HashSet<>();
 
     public JoinMessageManager(@Nonnull Path dataDirectory, @Nonnull HytaleLogger logger) {
         this.dataDirectory = dataDirectory;
@@ -80,7 +81,7 @@ public class JoinMessageManager {
 
     public void onPlayerConnect(@Nonnull PlayerConnectEvent event) {
         PlayerRef playerRef = event.getPlayerRef();
-        connectedPlayers.add(playerRef.getUuid());
+        justConnected.add(playerRef.getUuid());
 
         if (!config.enabled()) {
             return;
@@ -100,7 +101,7 @@ public class JoinMessageManager {
 
     public void onPlayerDisconnect(@Nonnull PlayerDisconnectEvent event) {
         PlayerRef playerRef = event.getPlayerRef();
-        connectedPlayers.remove(playerRef.getUuid());
+        disconnecting.add(playerRef.getUuid());
 
         if (!config.enabled()) {
             return;
@@ -121,14 +122,12 @@ public class JoinMessageManager {
                 }
             }
         }
+
+        disconnecting.remove(playerRef.getUuid());
     }
 
     public void onPlayerEnterWorld(@Nonnull AddPlayerToWorldEvent event) {
         event.setBroadcastJoinMessage(false);
-
-        if (!config.enabled()) {
-            return;
-        }
 
         World world = event.getWorld();
         PlayerRef playerRef = event.getHolder().getComponent(PlayerRef.getComponentType());
@@ -136,7 +135,11 @@ public class JoinMessageManager {
             return;
         }
 
-        if (!connectedPlayers.contains(playerRef.getUuid())) {
+        if (justConnected.remove(playerRef.getUuid())) {
+            return;
+        }
+
+        if (!config.enabled()) {
             return;
         }
 
@@ -152,17 +155,17 @@ public class JoinMessageManager {
     }
 
     public void onPlayerLeaveWorld(@Nonnull DrainPlayerFromWorldEvent event) {
-        if (!config.enabled()) {
-            return;
-        }
-
         World world = event.getWorld();
         PlayerRef playerRef = event.getHolder().getComponent(PlayerRef.getComponentType());
         if (playerRef == null) {
             return;
         }
 
-        if (!connectedPlayers.contains(playerRef.getUuid())) {
+        if (disconnecting.contains(playerRef.getUuid())) {
+            return;
+        }
+
+        if (!config.enabled()) {
             return;
         }
 

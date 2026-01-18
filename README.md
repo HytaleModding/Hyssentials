@@ -13,7 +13,7 @@ Essential server commands and a powerful rank system for Hytale.
 - [**Private Messaging**](https://leclowndu93150.github.io/Hyssentials/#private-messaging) - Send private messages to other players
 - [**Admin Chat**](https://leclowndu93150.github.io/Hyssentials/#admin-chat) - Configurable staff/admin chat channels
 - [**Vanish**](https://leclowndu93150.github.io/Hyssentials/#vanish) - Become invisible to other players
-- [**Custom Join/Leave Messages**](https://leclowndu93150.github.io/Hyssentials/#custom-join-messages) - Customize player join and leave messages
+- [**Custom Join/Leave Messages**](https://leclowndu93150.github.io/Hyssentials/#custom-join-messages) - Separate messages for server connect/disconnect and world transitions, with color and formatting support
 - [**Interactive UIs**](https://leclowndu93150.github.io/Hyssentials/#interactive-uis) - Click-to-teleport interfaces
 - [**Rank System**](https://leclowndu93150.github.io/Hyssentials/#rank-system) - Fully customizable ranks with in-game UI
 - [**Per-Rank Settings**](https://leclowndu93150.github.io/Hyssentials/#per-rank-settings) - Configure cooldowns, warmups, and home limits per rank
