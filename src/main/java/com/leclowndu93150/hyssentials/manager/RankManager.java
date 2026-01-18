@@ -31,6 +31,7 @@ public class RankManager {
     private final HytaleLogger logger;
     private final List<Rank> ranks;
     private final String defaultRankId;
+    private Runnable onRanksSavedCallback;
 
     private static final String LEGACY_VIP_PERMISSION = "hyssentials.vip";
     private static final String LEGACY_VIP_HOMES = "hyssentials.vip.homes";
@@ -97,9 +98,17 @@ public class RankManager {
             Path file = dataDirectory.resolve(RANKS_FILE);
             Files.writeString(file, GSON.toJson(wrapper));
             logger.atInfo().log("Saved %d ranks to %s", ranks.size(), RANKS_FILE);
+
+            if (onRanksSavedCallback != null) {
+                onRanksSavedCallback.run();
+            }
         } catch (IOException e) {
             logger.atSevere().log("Failed to save ranks: %s", e.getMessage());
         }
+    }
+
+    public void setOnRanksSavedCallback(@Nullable Runnable callback) {
+        this.onRanksSavedCallback = callback;
     }
 
     public void reload() {
@@ -264,6 +273,28 @@ public class RankManager {
             }
         } else {
             logger.atWarning().log("[RankManager] Rank not found: %s", rankId);
+        }
+    }
+
+    public void ensureGrantedPermissions(@Nonnull UUID playerUuid) {
+        Rank playerRank = getPlayerRank(playerUuid);
+        List<String> grantedPerms = playerRank.getGrantedPermissions();
+        if (grantedPerms.isEmpty()) {
+            return;
+        }
+
+        PermissionsModule perms = PermissionsModule.get();
+        List<String> missingPerms = new ArrayList<>();
+        for (String perm : grantedPerms) {
+            if (!perms.hasPermission(playerUuid, perm)) {
+                missingPerms.add(perm);
+            }
+        }
+
+        if (!missingPerms.isEmpty()) {
+            logger.atFine().log("[RankManager] Granting %d missing permissions to player %s from rank %s",
+                missingPerms.size(), playerUuid, playerRank.getId());
+            perms.addUserPermission(playerUuid, Set.copyOf(missingPerms));
         }
     }
 

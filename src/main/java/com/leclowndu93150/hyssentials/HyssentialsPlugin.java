@@ -48,6 +48,10 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.AddPlayerToWorldEvent;
 import com.hypixel.hytale.server.core.event.events.player.DrainPlayerFromWorldEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
@@ -65,6 +69,7 @@ public class HyssentialsPlugin extends JavaPlugin {
     private AdminChatManager adminChatManager;
     private VanishManager vanishManager;
     private JoinMessageManager joinMessageManager;
+    private ScheduledExecutorService permissionScheduler;
 
     public HyssentialsPlugin(@Nonnull JavaPluginInit init) {
         super(init);
@@ -84,6 +89,7 @@ public class HyssentialsPlugin extends JavaPlugin {
 
         this.dataManager = new DataManager(this.getDataDirectory(), this.getLogger());
         this.rankManager = new RankManager(this.getDataDirectory(), this.getLogger(), cfg.getDefaultRankId());
+        this.rankManager.setOnRanksSavedCallback(this::syncAllPlayerPermissions);
         this.backManager = new BackManager(cfg.getBackHistorySize());
         this.cooldownManager = new CooldownManager();
         this.warmupManager = new TeleportWarmupManager(this.backManager, this.cooldownManager);
@@ -129,6 +135,14 @@ public class HyssentialsPlugin extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new ReplyCommand(this.msgManager));
         this.getCommandRegistry().registerCommand(new AdminChatCommand(this.adminChatManager));
         this.getCommandRegistry().registerCommand(new VanishCommand(this.vanishManager));
+
+        this.permissionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "Hyssentials-PermissionSync");
+            t.setDaemon(true);
+            return t;
+        });
+        this.permissionScheduler.scheduleAtFixedRate(this::syncAllPlayerPermissions, 1, 1, TimeUnit.MINUTES);
+
         this.getLogger().at(Level.INFO).log("Hyssentials loaded with rank system!");
     }
 
@@ -139,6 +153,8 @@ public class HyssentialsPlugin extends JavaPlugin {
         PlayerRef player = event.getPlayerRef();
         if (!playerHasAnyRank(player)) {
             rankManager.grantRankPermission(player.getUuid(), rankManager.getDefaultRankId());
+        } else {
+            rankManager.ensureGrantedPermissions(player.getUuid());
         }
     }
 
@@ -157,8 +173,29 @@ public class HyssentialsPlugin extends JavaPlugin {
         vanishManager.onPlayerLeave(event.getPlayerRef().getUuid());
     }
 
+    private void syncAllPlayerPermissions() {
+        try {
+            Universe universe = Universe.get();
+            if (universe == null) {
+                return;
+            }
+            for (PlayerRef player : universe.getOnlinePlayers()) {
+                rankManager.ensureGrantedPermissions(player.getUuid());
+            }
+        } catch (Exception e) {
+            this.getLogger().at(Level.WARNING).log("Failed to sync player permissions: %s", e.getMessage());
+        }
+    }
+
+    public void triggerPermissionSync() {
+        syncAllPlayerPermissions();
+    }
+
     @Override
     protected void shutdown() {
+        if (this.permissionScheduler != null) {
+            this.permissionScheduler.shutdown();
+        }
         if (this.homeManager != null) {
             this.homeManager.save();
         }
