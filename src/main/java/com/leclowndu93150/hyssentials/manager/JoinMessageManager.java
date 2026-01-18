@@ -122,8 +122,6 @@ public class JoinMessageManager {
                 }
             }
         }
-
-        disconnecting.remove(playerRef.getUuid());
     }
 
     public void onPlayerEnterWorld(@Nonnull AddPlayerToWorldEvent event) {
@@ -161,7 +159,7 @@ public class JoinMessageManager {
             return;
         }
 
-        if (disconnecting.contains(playerRef.getUuid())) {
+        if (disconnecting.remove(playerRef.getUuid())) {
             return;
         }
 
