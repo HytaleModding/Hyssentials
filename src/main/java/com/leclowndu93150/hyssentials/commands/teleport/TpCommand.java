@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayer
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
-import com.hypixel.hytale.server.core.permissions.HytalePermissions;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -21,6 +20,7 @@ import com.leclowndu93150.hyssentials.data.LocationData;
 import com.leclowndu93150.hyssentials.lang.Messages;
 import com.leclowndu93150.hyssentials.manager.BackManager;
 import com.leclowndu93150.hyssentials.util.ChatUtil;
+import com.leclowndu93150.hyssentials.util.Permissions;
 import javax.annotation.Nonnull;
 
 public class TpCommand extends AbstractPlayerCommand {
@@ -30,7 +30,7 @@ public class TpCommand extends AbstractPlayerCommand {
     public TpCommand(@Nonnull BackManager backManager) {
         super("htp", "Teleport to a player (admin)");
         this.backManager = backManager;
-        this.requirePermission(HytalePermissions.fromCommand("hyssentials.htp"));
+        this.requirePermission(Permissions.HTP);
     }
 
     @Override

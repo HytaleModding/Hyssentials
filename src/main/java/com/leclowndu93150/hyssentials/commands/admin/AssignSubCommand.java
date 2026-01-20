@@ -23,6 +23,12 @@ public class AssignSubCommand extends AbstractAsyncCommand {
     public AssignSubCommand(@Nonnull RankManager rankManager) {
         super("assign", "Assign ranks to players");
         this.rankManager = rankManager;
+        this.requirePermission(Permissions.ADMIN_RANKS);
+    }
+
+    @Override
+    protected boolean canGeneratePermission() {
+        return false;
     }
 
     @Nonnull

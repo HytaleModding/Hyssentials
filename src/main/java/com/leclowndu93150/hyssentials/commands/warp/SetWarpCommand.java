@@ -10,13 +10,13 @@ import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.permissions.HytalePermissions;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.leclowndu93150.hyssentials.lang.Messages;
 import com.leclowndu93150.hyssentials.manager.WarpManager;
 import com.leclowndu93150.hyssentials.util.ChatUtil;
+import com.leclowndu93150.hyssentials.util.Permissions;
 import javax.annotation.Nonnull;
 
 public class SetWarpCommand extends AbstractPlayerCommand {
@@ -26,7 +26,7 @@ public class SetWarpCommand extends AbstractPlayerCommand {
     public SetWarpCommand(@Nonnull WarpManager warpManager) {
         super("setwarp", "Set a server warp at your current location");
         this.warpManager = warpManager;
-        this.requirePermission(HytalePermissions.fromCommand("hyssentials.setwarp"));
+        this.requirePermission(Permissions.SETWARP);
     }
 
     @Override

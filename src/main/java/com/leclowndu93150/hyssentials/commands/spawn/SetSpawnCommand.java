@@ -9,7 +9,6 @@ import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.permissions.HytalePermissions;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.WorldConfig;
@@ -17,6 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.spawn.GlobalSpawnProvider;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.leclowndu93150.hyssentials.lang.Messages;
 import com.leclowndu93150.hyssentials.util.ChatUtil;
+import com.leclowndu93150.hyssentials.util.Permissions;
 import java.text.DecimalFormat;
 import javax.annotation.Nonnull;
 
@@ -25,7 +25,7 @@ public class SetSpawnCommand extends AbstractPlayerCommand {
 
     public SetSpawnCommand() {
         super("setspawn", "Set the world spawn at your current location");
-        this.requirePermission(HytalePermissions.fromCommand("hyssentials.setspawn"));
+        this.requirePermission(Permissions.SETSPAWN);
     }
 
     @Override

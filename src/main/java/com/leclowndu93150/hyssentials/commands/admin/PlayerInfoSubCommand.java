@@ -32,6 +32,11 @@ public class PlayerInfoSubCommand extends AbstractPlayerCommand {
     }
 
     @Override
+    protected boolean canGeneratePermission() {
+        return false;
+    }
+
+    @Override
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef sender, @Nonnull World world) {
         if (!Permissions.canViewPlayerInfo(sender)) {

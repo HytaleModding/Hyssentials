@@ -8,6 +8,7 @@ import java.util.UUID;
 public final class Permissions {
     public static final String COOLDOWN_BYPASS = "hyssentials.cooldown.bypass";
 
+    // Admin permissions
     public static final String ADMIN_RANKS = "hyssentials.admin.ranks";
     public static final String ADMIN_SETRANK = "hyssentials.admin.setrank";
     public static final String ADMIN_PLAYERINFO = "hyssentials.admin.playerinfo";
@@ -19,6 +20,13 @@ public final class Permissions {
 
     // Vanish permission
     public static final String VANISH = "hyssentials.vanish";
+
+    // Command permissions
+    public static final String SETWARP = "hyssentials.setwarp";
+    public static final String DELWARP = "hyssentials.delwarp";
+    public static final String SETSPAWN = "hyssentials.setspawn";
+    public static final String HTP = "hyssentials.htp";
+    public static final String HTPHERE = "hyssentials.htphere";
 
     @Deprecated
     public static final String VIP = "hyssentials.vip";

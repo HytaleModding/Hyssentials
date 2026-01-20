@@ -20,6 +20,12 @@ public class VanishCommand extends AbstractPlayerCommand {
         super("vanish", "Toggle vanish mode");
         this.vanishManager = vanishManager;
         this.addAliases("v");
+        this.requirePermission(Permissions.VANISH);
+    }
+
+    @Override
+    protected boolean canGeneratePermission() {
+        return false;
     }
 
     @Override

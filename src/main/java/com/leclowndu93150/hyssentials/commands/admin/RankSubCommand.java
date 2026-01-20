@@ -23,6 +23,12 @@ public class RankSubCommand extends AbstractAsyncCommand {
     public RankSubCommand(@Nonnull RankManager rankManager) {
         super("rank", "Manage ranks");
         this.rankManager = rankManager;
+        this.requirePermission(Permissions.ADMIN_RANKS);
+    }
+
+    @Override
+    protected boolean canGeneratePermission() {
+        return false;
     }
 
     @Nonnull
