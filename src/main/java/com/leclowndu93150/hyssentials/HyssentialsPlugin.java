@@ -127,7 +127,7 @@ public class HyssentialsPlugin extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new SetSpawnCommand());
         this.getCommandRegistry().registerCommand(new SpawnCommand(this.warmupManager, this.cooldownManager, this.rankManager));
         this.getCommandRegistry().registerCommand(new BackCommand(this.backManager, this.warmupManager, this.cooldownManager, this.rankManager));
-        this.getCommandRegistry().registerCommand(new RtpCommand(this.warmupManager, this.cooldownManager, this.rankManager));
+        this.getCommandRegistry().registerCommand(new RtpCommand(this.warmupManager, this.cooldownManager, this.rankManager, this.config.get().getRtpMinRange(), this.config.get().getRtpMaxRange()));
         this.getCommandRegistry().registerCommand(new TpCommand(this.backManager));
         this.getCommandRegistry().registerCommand(new TphereCommand(this.backManager));
         this.getCommandRegistry().registerCommand(new HysCommand(this.rankManager, this.homeManager, this.config));

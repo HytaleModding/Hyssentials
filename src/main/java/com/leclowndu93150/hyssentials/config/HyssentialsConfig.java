@@ -14,12 +14,16 @@ public class HyssentialsConfig {
         .append(new KeyedCodec<>("BackHistorySize", Codec.INTEGER), HyssentialsConfig::setBackHistorySize, HyssentialsConfig::getBackHistorySize).add()
         .append(new KeyedCodec<>("DefaultRankId", Codec.STRING), HyssentialsConfig::setDefaultRankId, HyssentialsConfig::getDefaultRankId).add()
         .append(new KeyedCodec<>("Language", Codec.STRING), HyssentialsConfig::setLanguage, HyssentialsConfig::getLanguage).add()
+        .append(new KeyedCodec<>("RtpMinRange", Codec.INTEGER), HyssentialsConfig::setRtpMinRange, HyssentialsConfig::getRtpMinRange).add()
+        .append(new KeyedCodec<>("RtpMaxRange", Codec.INTEGER), HyssentialsConfig::setRtpMaxRange, HyssentialsConfig::getRtpMaxRange).add()
         .build();
 
     private int configVersion = CONFIG_VERSION;
     private int backHistorySize = 5;
     private String defaultRankId = "default";
     private String language = "en";
+    private int rtpMinRange = 100;
+    private int rtpMaxRange = 5000;
 
     public HyssentialsConfig() {
     }
@@ -54,5 +58,21 @@ public class HyssentialsConfig {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public int getRtpMinRange() {
+        return rtpMinRange;
+    }
+
+    public void setRtpMinRange(int rtpMinRange) {
+        this.rtpMinRange = rtpMinRange;
+    }
+
+    public int getRtpMaxRange() {
+        return rtpMaxRange;
+    }
+
+    public void setRtpMaxRange(int rtpMaxRange) {
+        this.rtpMaxRange = rtpMaxRange;
     }
 }
