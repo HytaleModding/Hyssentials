@@ -41,6 +41,7 @@ import com.leclowndu93150.hyssentials.manager.AdminChatManager;
 import com.leclowndu93150.hyssentials.manager.VanishManager;
 import com.leclowndu93150.hyssentials.manager.JoinMessageManager;
 import com.leclowndu93150.hyssentials.commands.admin.VanishCommand;
+import com.leclowndu93150.hyssentials.commands.admin.FlyCommand;
 import com.leclowndu93150.hyssentials.system.PlayerDeathBackSystem;
 import com.leclowndu93150.hyssentials.lang.LanguageManager;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
@@ -135,6 +136,7 @@ public class HyssentialsPlugin extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new ReplyCommand(this.msgManager));
         this.getCommandRegistry().registerCommand(new AdminChatCommand(this.adminChatManager));
         this.getCommandRegistry().registerCommand(new VanishCommand(this.vanishManager));
+        this.getCommandRegistry().registerCommand(new FlyCommand());
 
         this.permissionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "Hyssentials-PermissionSync");
@@ -204,6 +206,9 @@ public class HyssentialsPlugin extends JavaPlugin {
         }
         if (this.warmupManager != null) {
             this.warmupManager.shutdown();
+        }
+        if (this.joinMessageManager != null) {
+            this.joinMessageManager.shutdown();
         }
     }
 

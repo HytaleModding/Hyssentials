@@ -12,29 +12,45 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.WorldConfig;
+import com.hypixel.hytale.protocol.UpdateType;
+import com.hypixel.hytale.protocol.packets.assets.UpdateTranslations;
 import com.leclowndu93150.hyssentials.data.JoinMessageConfig;
 import com.leclowndu93150.hyssentials.util.ChatUtil;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 
 public class JoinMessageManager {
     private static final String CONFIG_FILE = "joinmessages.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final String TRANSLATION_KEY_JOINED_WORLD = "server.general.playerJoinedWorld";
+    private static final String TRANSLATION_KEY_LEFT_WORLD = "server.general.playerLeftWorld";
+    private static final long JOIN_MESSAGE_DELAY_MS = 3000;
 
     private final Path dataDirectory;
     private final HytaleLogger logger;
     private JoinMessageConfig config;
     private final Set<UUID> justConnected = new HashSet<>();
     private final Set<UUID> disconnecting = new HashSet<>();
+    private final ScheduledExecutorService scheduler;
 
     public JoinMessageManager(@Nonnull Path dataDirectory, @Nonnull HytaleLogger logger) {
         this.dataDirectory = dataDirectory;
         this.logger = logger;
+        this.scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "Hyssentials-JoinMessages");
+            t.setDaemon(true);
+            return t;
+        });
         load();
     }
 
@@ -74,14 +90,54 @@ public class JoinMessageManager {
         load();
     }
 
+    public void shutdown() {
+        if (scheduler != null) {
+            scheduler.shutdown();
+        }
+    }
+
     @Nonnull
     public JoinMessageConfig getConfig() {
         return config;
     }
 
+    public void overrideDefaultTranslationsForAllPlayers() {
+        if (!config.enabled()) {
+            return;
+        }
+
+        Map<String, String> overrides = new HashMap<>();
+        overrides.put(TRANSLATION_KEY_JOINED_WORLD, "");
+        overrides.put(TRANSLATION_KEY_LEFT_WORLD, "");
+        UpdateTranslations packet = new UpdateTranslations(UpdateType.AddOrUpdate, overrides);
+
+        Universe universe = Universe.get();
+        if (universe == null) {
+            return;
+        }
+
+        for (PlayerRef player : universe.getPlayers()) {
+            player.getPacketHandler().write(packet);
+        }
+    }
+
+    public void overrideDefaultTranslations(@Nonnull PlayerRef playerRef) {
+        if (!config.enabled()) {
+            return;
+        }
+
+        Map<String, String> overrides = new HashMap<>();
+        overrides.put(TRANSLATION_KEY_JOINED_WORLD, "");
+        overrides.put(TRANSLATION_KEY_LEFT_WORLD, "");
+        UpdateTranslations packet = new UpdateTranslations(UpdateType.AddOrUpdate, overrides);
+        playerRef.getPacketHandler().write(packet);
+    }
+
     public void onPlayerConnect(@Nonnull PlayerConnectEvent event) {
         PlayerRef playerRef = event.getPlayerRef();
         justConnected.add(playerRef.getUuid());
+
+        overrideDefaultTranslations(playerRef);
 
         if (!config.enabled()) {
             return;
@@ -91,12 +147,7 @@ public class JoinMessageManager {
         String formattedMessage = config.formatServerJoinMessage(playerName);
         Message message = ChatUtil.parseFormatted(formattedMessage);
 
-        World world = event.getWorld();
-        if (world != null) {
-            for (PlayerRef player : world.getPlayerRefs()) {
-                player.sendMessage(message);
-            }
-        }
+        scheduler.schedule(() -> broadcastToAllPlayers(message, null), JOIN_MESSAGE_DELAY_MS, TimeUnit.MILLISECONDS);
     }
 
     public void onPlayerDisconnect(@Nonnull PlayerDisconnectEvent event) {
@@ -111,17 +162,7 @@ public class JoinMessageManager {
         String formattedMessage = config.formatServerLeaveMessage(playerName);
         Message message = ChatUtil.parseFormatted(formattedMessage);
 
-        UUID worldUuid = playerRef.getWorldUuid();
-        if (worldUuid != null) {
-            World world = Universe.get().getWorld(worldUuid);
-            if (world != null) {
-                for (PlayerRef player : world.getPlayerRefs()) {
-                    if (!player.getUuid().equals(playerRef.getUuid())) {
-                        player.sendMessage(message);
-                    }
-                }
-            }
-        }
+        broadcastToAllPlayers(message, playerRef.getUuid());
     }
 
     public void onPlayerEnterWorld(@Nonnull AddPlayerToWorldEvent event) {
@@ -174,6 +215,19 @@ public class JoinMessageManager {
 
         for (PlayerRef player : world.getPlayerRefs()) {
             if (!player.getUuid().equals(playerRef.getUuid())) {
+                player.sendMessage(message);
+            }
+        }
+    }
+
+    private void broadcastToAllPlayers(@Nonnull Message message, UUID excludeUuid) {
+        Universe universe = Universe.get();
+        if (universe == null) {
+            return;
+        }
+
+        for (PlayerRef player : universe.getPlayers()) {
+            if (excludeUuid == null || !player.getUuid().equals(excludeUuid)) {
                 player.sendMessage(message);
             }
         }

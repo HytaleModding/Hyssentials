@@ -14,7 +14,7 @@ AdminUI-main
 /out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+decrypt_auth.py
 ### Eclipse ###
 .apt_generated
 .classpath

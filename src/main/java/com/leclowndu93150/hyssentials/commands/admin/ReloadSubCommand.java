@@ -34,11 +34,7 @@ public class ReloadSubCommand extends AbstractPlayerCommand {
     @Override
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef sender, @Nonnull World world) {
-        if (!Permissions.canReload(sender)) {
-            context.sendMessage(ChatUtil.parse(Messages.NO_PERMISSION_RELOAD));
-            return;
-        }
-
+        // Permission check is handled by requirePermission() in constructor
         try {
             config.load().join();
             rankManager.reload();

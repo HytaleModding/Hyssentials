@@ -56,6 +56,8 @@
   "success": {
     "vanish_enabled": "<green>You are now vanished. Other players cannot see you.</green>",
     "vanish_disabled": "<green>You are no longer vanished. Other players can now see you.</green>",
+    "fly_enabled": "<green>Flight mode enabled.</green>",
+    "fly_disabled": "<green>Flight mode disabled.</green>",
     "config_reloaded": "<green>Configuration and ranks reloaded successfully.</green>",
     "home_set": "<green>Home '<yellow>%s</yellow>' set at <gray>%.1f, %.1f, %.1f</gray> in <yellow>%s</yellow></green>",
     "home_deleted": "<green>Home '<yellow>%s</yellow>' has been deleted.</green>",

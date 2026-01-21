@@ -39,11 +39,7 @@ public class PlayerInfoSubCommand extends AbstractPlayerCommand {
     @Override
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef sender, @Nonnull World world) {
-        if (!Permissions.canViewPlayerInfo(sender)) {
-            context.sendMessage(ChatUtil.parse(Messages.NO_PERMISSION_PLAYERINFO));
-            return;
-        }
-
+        // Permission check is handled by requirePermission() in constructor
         String targetName = playerArg.get(context);
         PlayerRef targetPlayer = Universe.get().getPlayerByUsername(targetName, NameMatching.STARTS_WITH_IGNORE_CASE);
         if (targetPlayer == null) {

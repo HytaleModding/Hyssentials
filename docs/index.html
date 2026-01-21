@@ -441,6 +441,7 @@
                     <li><strong>Admin UI</strong> - In-game graphical interface for rank management</li>
                     <li><strong>Interactive GUIs</strong> - Run commands without arguments to open selection UIs</li>
                     <li><strong>Vanish Mode</strong> - Staff can become invisible to other players with /vanish</li>
+                    <li><strong>Fly Mode</strong> - Staff can toggle flight mode with /fly</li>
                     <li><strong>Custom Join Messages</strong> - Customize player join and leave messages with placeholders</li>
                 </ul>
             </section>
@@ -802,6 +803,29 @@
                 <div class="callout callout-tip">
                     <div class="callout-title">Vanish Features</div>
                     <p>Vanished players are completely invisible to other players. The vanish state persists across reconnects, and you'll receive a reminder when you join if you're still vanished.</p>
+                </div>
+
+                <h3>Fly</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Permission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/fly</code></td>
+                            <td>Toggle flight mode</td>
+                            <td><span class="perm">hyssentials.fly</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Fly Features</div>
+                    <p>Enables creative-style flight for the player. Useful for admins and staff members who need to quickly navigate the world.</p>
                 </div>
 
                 <h3>Hyssentials Admin Commands</h3>
@@ -1648,6 +1672,14 @@
                         <tr>
                             <td><code>hyssentials.admin.reload</code></td>
                             <td>Reload configuration</td>
+                        </tr>
+                        <tr>
+                            <td><code>hyssentials.vanish</code></td>
+                            <td>Toggle vanish mode</td>
+                        </tr>
+                        <tr>
+                            <td><code>hyssentials.fly</code></td>
+                            <td>Toggle flight mode</td>
                         </tr>
                     </tbody>
                 </table>

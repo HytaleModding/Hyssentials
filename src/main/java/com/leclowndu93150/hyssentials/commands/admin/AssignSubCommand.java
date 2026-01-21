@@ -3,7 +3,6 @@ package com.leclowndu93150.hyssentials.commands.admin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.CommandSender;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractAsyncCommand;
@@ -40,13 +39,10 @@ public class AssignSubCommand extends AbstractAsyncCommand {
             if (ref != null && ref.isValid()) {
                 Store<EntityStore> store = ref.getStore();
                 World world = store.getExternalData().getWorld();
+                // Permission check is handled by requirePermission() in constructor
                 return CompletableFuture.runAsync(() -> {
                     PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
                     if (playerRef != null) {
-                        if (!Permissions.canManageRanks(playerRef)) {
-                            context.sendMessage(Message.raw("You don't have permission to assign ranks."));
-                            return;
-                        }
                         player.getPageManager().openCustomPage(ref, store, new PlayerRankAssignGui(playerRef, rankManager, CustomPageLifetime.CanDismiss));
                     }
                 }, world);

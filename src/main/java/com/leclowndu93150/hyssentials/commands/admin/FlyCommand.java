@@ -4,23 +4,20 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.entity.entities.player.movement.MovementManager;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.leclowndu93150.hyssentials.lang.Messages;
-import com.leclowndu93150.hyssentials.manager.VanishManager;
 import com.leclowndu93150.hyssentials.util.ChatUtil;
 import com.leclowndu93150.hyssentials.util.Permissions;
 import javax.annotation.Nonnull;
 
-public class VanishCommand extends AbstractPlayerCommand {
-    private final VanishManager vanishManager;
+public class FlyCommand extends AbstractPlayerCommand {
 
-    public VanishCommand(@Nonnull VanishManager vanishManager) {
-        super("vanish", "Toggle vanish mode");
-        this.vanishManager = vanishManager;
-        this.addAliases("v");
-        this.requirePermission(Permissions.VANISH);
+    public FlyCommand() {
+        super("fly", "Toggle flight mode");
+        this.requirePermission(Permissions.FLY);
     }
 
     @Override
@@ -31,13 +28,19 @@ public class VanishCommand extends AbstractPlayerCommand {
     @Override
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
-        // Permission check is handled by requirePermission() in constructor
-        boolean nowVanished = vanishManager.toggleVanish(playerRef.getUuid());
+        MovementManager movementManager = store.getComponent(ref, MovementManager.getComponentType());
+        if (movementManager == null) {
+            return;
+        }
 
-        if (nowVanished) {
-            context.sendMessage(ChatUtil.parse(Messages.SUCCESS_VANISH_ENABLED));
+        boolean currentlyCanFly = movementManager.getSettings().canFly;
+        movementManager.getSettings().canFly = !currentlyCanFly;
+        movementManager.update(playerRef.getPacketHandler());
+
+        if (!currentlyCanFly) {
+            context.sendMessage(ChatUtil.parse(Messages.SUCCESS_FLY_ENABLED));
         } else {
-            context.sendMessage(ChatUtil.parse(Messages.SUCCESS_VANISH_DISABLED));
+            context.sendMessage(ChatUtil.parse(Messages.SUCCESS_FLY_DISABLED));
         }
     }
 }

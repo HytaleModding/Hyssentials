@@ -18,4 +18,11 @@ public class HysCommand extends AbstractCommandCollection {
         this.addSubCommand(new PlayerInfoSubCommand(rankManager, homeManager));
         this.addSubCommand(new ReloadSubCommand(rankManager, config));
     }
+
+    @Override
+    protected boolean canGeneratePermission() {
+        // Don't require a permission for the parent command itself
+        // Each subcommand has its own permission requirement
+        return false;
+    }
 }

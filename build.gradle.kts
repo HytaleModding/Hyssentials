@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.leclowndu93150"
-version = "2.3.4"
+version = "2.3.5"
 val javaVersion = 25
 
 repositories {

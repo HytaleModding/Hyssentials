@@ -37,11 +37,7 @@ public class RemoveRankSubCommand extends AbstractPlayerCommand {
     @Override
     protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
                           @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef sender, @Nonnull World world) {
-        if (!Permissions.canSetRanks(sender)) {
-            context.sendMessage(ChatUtil.parse(Messages.NO_PERMISSION_REMOVERANK));
-            return;
-        }
-
+        // Permission check is handled by requirePermission() in constructor
         String targetName = playerArg.get(context);
         String rankId = rankArg.get(context);
 

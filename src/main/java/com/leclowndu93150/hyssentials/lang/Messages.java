@@ -62,6 +62,8 @@ public enum Messages {
     // ============ SUCCESS MESSAGES ============
     SUCCESS_VANISH_ENABLED("success.vanish_enabled"),
     SUCCESS_VANISH_DISABLED("success.vanish_disabled"),
+    SUCCESS_FLY_ENABLED("success.fly_enabled"),
+    SUCCESS_FLY_DISABLED("success.fly_disabled"),
     SUCCESS_CONFIG_RELOADED("success.config_reloaded"),
     SUCCESS_HOME_SET("success.home_set"),
     SUCCESS_HOME_DELETED("success.home_deleted"),

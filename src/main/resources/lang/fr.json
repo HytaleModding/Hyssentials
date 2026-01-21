@@ -56,6 +56,8 @@
   "success": {
     "vanish_enabled": "<green>Vous êtes maintenant invisible. Les autres joueurs ne peuvent pas vous voir.</green>",
     "vanish_disabled": "<green>Vous n'êtes plus invisible. Les autres joueurs peuvent maintenant vous voir.</green>",
+    "fly_enabled": "<green>Mode vol activé.</green>",
+    "fly_disabled": "<green>Mode vol désactivé.</green>",
     "config_reloaded": "<green>Configuration et rangs rechargés avec succès.</green>",
     "home_set": "<green>Home '<yellow>%s</yellow>' défini à <gray>%.1f, %.1f, %.1f</gray> dans <yellow>%s</yellow></green>",
     "home_deleted": "<green>Home '<yellow>%s</yellow>' a été supprimé.</green>",

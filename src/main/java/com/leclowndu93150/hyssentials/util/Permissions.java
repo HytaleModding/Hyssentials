@@ -18,8 +18,8 @@ public final class Permissions {
     public static final String ADMIN_CHAT_STAFF = "hyssentials.adminchat.staff";
     public static final String ADMIN_CHAT_ADMIN = "hyssentials.adminchat.admin";
 
-    // Vanish permission
     public static final String VANISH = "hyssentials.vanish";
+    public static final String FLY = "hyssentials.fly";
 
     // Command permissions
     public static final String SETWARP = "hyssentials.setwarp";
