@@ -14,10 +14,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Level;
 
-/**
- * Manages translations for the plugin.
- * Loads from JAR defaults, overlays user customizations, syncs automatically.
- */
 public final class LanguageManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final Type MAP_TYPE = new TypeToken<Map<String, Object>>() {}.getType();
@@ -54,31 +50,26 @@ public final class LanguageManager {
         load(currentLocale);
     }
 
-    /**
-     * Loads messages for the given locale.
-     * First loads defaults from JAR, then overlays user customizations.
-     * Syncs user file if keys differ from expected.
-     */
     private static void load(@Nonnull String locale) {
         messages.clear();
 
         String fileName = locale + ".json";
         Path userFile = langFolder.resolve(fileName);
 
-        // Get expected keys from Messages enum
+    
         Set<String> expectedKeys = getExpectedKeys();
 
-        // Load defaults from JAR
+    
         Map<String, String> defaults = loadFromResource("/lang/" + fileName);
 
-        // If no bundled resource exists, create defaults from expected keys
+    
         if (defaults.isEmpty()) {
             for (String key : expectedKeys) {
                 defaults.put(key, "TODO: " + key);
             }
         }
 
-        // If user file doesn't exist, create it
+    
         if (!Files.exists(userFile)) {
             writeFile(userFile, defaults);
             messages.putAll(defaults);
@@ -86,23 +77,22 @@ public final class LanguageManager {
             return;
         }
 
-        // Load user file
+    
         Map<String, String> userMessages = loadFromFile(userFile);
 
-        // Start with defaults, overlay user values (only for keys that still exist)
+    
         messages.putAll(defaults);
         for (Map.Entry<String, String> entry : userMessages.entrySet()) {
             if (expectedKeys.contains(entry.getKey())) {
                 messages.put(entry.getKey(), entry.getValue());
             }
         }
-
-        // Check if sync needed
+        
         boolean hasMissing = !userMessages.keySet().containsAll(expectedKeys);
         boolean hasObsolete = !expectedKeys.containsAll(userMessages.keySet());
 
         if (hasMissing || hasObsolete) {
-            // Rebuild file: use user values where they exist, defaults for new keys
+           
             Map<String, String> synced = new LinkedHashMap<>();
             for (String key : expectedKeys) {
                 synced.put(key, userMessages.containsKey(key) ? userMessages.get(key) : defaults.getOrDefault(key, "TODO: " + key));
@@ -154,14 +144,14 @@ public final class LanguageManager {
         Set<String> langs = new LinkedHashSet<>();
         langs.add("en");
 
-        // Check bundled resources
+    
         for (String lang : Arrays.asList("fr", "es", "de", "it", "pt", "ru", "zh", "ja", "ko")) {
             if (LanguageManager.class.getResource("/lang/" + lang + ".json") != null) {
                 langs.add(lang);
             }
         }
 
-        // Check user directory
+     
         if (langFolder != null && Files.exists(langFolder)) {
             try (var stream = Files.list(langFolder)) {
                 stream.filter(p -> p.toString().endsWith(".json"))
@@ -173,8 +163,7 @@ public final class LanguageManager {
         return langs;
     }
 
-    // ============ File I/O ============
-
+   
     @Nonnull
     @SuppressWarnings("unchecked")
     private static Map<String, String> loadFromResource(@Nonnull String resourcePath) {
