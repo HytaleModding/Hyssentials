@@ -1,0 +1,62 @@
+package dev.hytalemodding.hyssentials.commands.admin;
+
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.NameMatching;
+import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
+import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
+import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.hytalemodding.hyssentials.data.Rank;
+import dev.hytalemodding.hyssentials.lang.Messages;
+import dev.hytalemodding.hyssentials.manager.HomeManager;
+import dev.hytalemodding.hyssentials.manager.RankManager;
+import dev.hytalemodding.hyssentials.util.ChatUtil;
+import dev.hytalemodding.hyssentials.util.Permissions;
+import javax.annotation.Nonnull;
+
+public class PlayerInfoSubCommand extends AbstractPlayerCommand {
+    private final RankManager rankManager;
+    private final HomeManager homeManager;
+    private final RequiredArg<String> playerArg = this.withRequiredArg("player", "Target player", ArgTypes.STRING);
+
+    public PlayerInfoSubCommand(@Nonnull RankManager rankManager, @Nonnull HomeManager homeManager) {
+        super("playerinfo", "View player rank and stats");
+        this.rankManager = rankManager;
+        this.homeManager = homeManager;
+        this.requirePermission(Permissions.ADMIN_PLAYERINFO);
+    }
+
+    @Override
+    protected boolean canGeneratePermission() {
+        return false;
+    }
+
+    @Override
+    protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
+                          @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef sender, @Nonnull World world) {
+        // Permission check is handled by requirePermission() in constructor
+        String targetName = playerArg.get(context);
+        PlayerRef targetPlayer = Universe.get().getPlayerByUsername(targetName, NameMatching.STARTS_WITH_IGNORE_CASE);
+        if (targetPlayer == null) {
+            context.sendMessage(ChatUtil.parse(Messages.ERROR_PLAYER_NOT_FOUND, targetName));
+            return;
+        }
+
+        Rank rank = rankManager.getPlayerRank(targetPlayer);
+        int homeCount = homeManager.getHomeCount(targetPlayer.getUuid());
+        int maxHomes = rankManager.getEffectiveMaxHomes(targetPlayer);
+
+        context.sendMessage(ChatUtil.parse(Messages.INFO_PLAYER_INFO_HEADER, targetPlayer.getUsername()));
+        context.sendMessage(ChatUtil.parse(Messages.INFO_PLAYER_INFO_UUID, targetPlayer.getUuid()));
+        context.sendMessage(ChatUtil.parse(Messages.INFO_PLAYER_INFO_RANK, rank.getDisplayName(), rank.getId()));
+        context.sendMessage(ChatUtil.parse(Messages.INFO_PLAYER_INFO_PERMISSION, rank.getPermission()));
+        context.sendMessage(ChatUtil.parse(Messages.INFO_PLAYER_INFO_HOMES, homeCount, maxHomes));
+        context.sendMessage(ChatUtil.parse(Messages.INFO_PLAYER_INFO_COOLDOWN, rank.getHomeSettings().getCooldownSeconds()));
+        context.sendMessage(ChatUtil.parse(Messages.INFO_PLAYER_INFO_WARMUP, rank.getHomeSettings().getWarmupSeconds()));
+    }
+}

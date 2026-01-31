@@ -1,0 +1,65 @@
+package dev.hytalemodding.hyssentials.commands.home;
+
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
+import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
+import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.hytalemodding.hyssentials.lang.Messages;
+import dev.hytalemodding.hyssentials.manager.HomeManager;
+import dev.hytalemodding.hyssentials.manager.RankManager;
+import dev.hytalemodding.hyssentials.util.ChatUtil;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+
+public class SetHomeCommand extends AbstractPlayerCommand {
+    private final HomeManager homeManager;
+    private final RankManager rankManager;
+    private final RequiredArg<String> nameArg = this.withRequiredArg("name", "Home name", ArgTypes.STRING);
+
+    public SetHomeCommand(@Nonnull HomeManager homeManager, @Nonnull RankManager rankManager) {
+        super("sethome", "Set a home at your current location");
+        this.homeManager = homeManager;
+        this.rankManager = rankManager;
+    }
+
+    @Override
+    protected boolean canGeneratePermission() {
+        return false;
+    }
+
+    @Override
+    protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
+                          @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
+        if (world.getName().startsWith("instance-")) {
+            context.sendMessage(ChatUtil.parse(Messages.ERROR_INSTANCE_WORLD_HOME));
+            return;
+        }
+        String name = nameArg.get(context);
+        UUID playerUuid = playerRef.getUuid();
+        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+        if (transform == null) {
+            context.sendMessage(ChatUtil.parse(Messages.ERROR_CANNOT_GET_POSITION));
+            return;
+        }
+        HeadRotation headRotation = store.getComponent(ref, HeadRotation.getComponentType());
+        Vector3f rotation = headRotation != null ? headRotation.getRotation() : new Vector3f(0, 0, 0);
+        Vector3d position = transform.getPosition();
+        int maxHomes = rankManager.getEffectiveMaxHomes(playerRef);
+        boolean success = homeManager.setHome(playerUuid, name, world, position, rotation, maxHomes);
+        if (success) {
+            context.sendMessage(ChatUtil.parse(Messages.SUCCESS_HOME_SET,
+                name, position.getX(), position.getY(), position.getZ(), world.getName()));
+        } else {
+            context.sendMessage(ChatUtil.parse(Messages.ERROR_MAX_HOMES_REACHED, maxHomes));
+        }
+    }
+}

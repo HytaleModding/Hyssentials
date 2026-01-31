@@ -1,4 +1,7 @@
+[![HytaleModding Logo](https://cdn.internal.hytalemodding.dev/assets/HytaleLogo_DiscordBannerV6.png)](https://hytalemodding.de)
+
 # Hyssentials
+
 
 Essential server commands and a powerful rank system for Hytale.
 
@@ -24,10 +27,4 @@ Essential server commands and a powerful rank system for Hytale.
 
 ## Support
 
-Join our [Discord](https://discord.gg/m4EHeRjfZ9) for support and updates!
-
----
-
-If you'd like to support me and the development of my mods, I recommend trying out BisectHosting. Use code "project8gbderam" to get 25% off your first month of a gaming server for new customers. They offer 24/7 support and lightning-fast response times, ensuring you're in great hands and providing exceptional assistance for all your gaming needs.
-
-[![Bisect](https://www.bisecthosting.com/partners/custom-banners/54bb107c-f9fc-4f32-8515-fb4e3d56c124.png)](https://www.bisecthosting.com/project8gbderam)
+Join our [Discord](https://discord.gg/hytalemodding) for support and updates!

@@ -3,7 +3,7 @@ plugins {
     id("hytale-mod") version "0.+"
 }
 
-group = "com.leclowndu93150"
+group = "dev.hytalemodding"
 version = "2.3.5"
 val javaVersion = 25
 
