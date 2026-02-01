@@ -156,6 +156,7 @@ public class JoinMessageManager {
         if (!config.enabled()) {
             return;
         }
+        overrideDefaultTranslations(playerRef);
 
         String playerName = playerRef.getUsername();
         String formattedMessage = config.formatServerLeaveMessage(playerName);
