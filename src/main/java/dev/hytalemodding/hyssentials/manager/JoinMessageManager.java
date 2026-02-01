@@ -137,11 +137,10 @@ public class JoinMessageManager {
         PlayerRef playerRef = event.getPlayerRef();
         justConnected.add(playerRef.getUuid());
 
-        overrideDefaultTranslations(playerRef);
-
         if (!config.enabled()) {
             return;
         }
+        overrideDefaultTranslations(playerRef);
 
         String playerName = playerRef.getUsername();
         String formattedMessage = config.formatServerJoinMessage(playerName);
