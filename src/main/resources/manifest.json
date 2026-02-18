@@ -2,13 +2,15 @@
     "Group": "dev.hytalemodding",
     "Name": "Hyssentials",
     "Version": "3.0.0",
-    "Description": "idk",
+    "Description": "Essential commands for Hytale servers - TPA, homes, warps, spawn and more!",
     "Authors": [
         {
-            "Name": "i do not know"
+            "Name": "Neil Revin",
+            "Email": "neil@hytalemodding.dev",
+            "Url": "https://itsneil.dev"
         }
     ],
-    "Website": "later",
+    "Website": "https://hytalemodding.dev",
     "DisabledByDefault": false,
     "IncludesAssetPack": true,
     "Dependencies": {
