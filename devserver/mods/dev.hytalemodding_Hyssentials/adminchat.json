@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "id": "staff",
+      "displayName": "Staff Chat",
+      "permission": "hyssentials.adminchat.staff",
+      "prefix": "[STAFF]",
+      "color": "#58a6ff"
+    },
+    {
+      "id": "admin",
+      "displayName": "Admin Chat",
+      "permission": "hyssentials.adminchat.admin",
+      "prefix": "[ADMIN]",
+      "color": "#f85149"
+    }
+  ],
+  "defaultGroup": "staff"
+}

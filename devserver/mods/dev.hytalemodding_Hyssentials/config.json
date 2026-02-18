@@ -1,0 +1,8 @@
+{
+  "ConfigVersion": 5,
+  "BackHistorySize": 5,
+  "DefaultRankId": "default",
+  "Language": "en",
+  "RtpMinRange": 100,
+  "RtpMaxRange": 5000
+}

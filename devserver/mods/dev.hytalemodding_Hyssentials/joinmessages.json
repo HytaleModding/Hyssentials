@@ -1,0 +1,7 @@
+{
+  "enabled": false,
+  "serverJoinMessage": "{player} has joined the server",
+  "serverLeaveMessage": "{player} has left the server",
+  "worldEnterMessage": "{player} entered {world}",
+  "worldLeaveMessage": "{player} left {world}"
+}

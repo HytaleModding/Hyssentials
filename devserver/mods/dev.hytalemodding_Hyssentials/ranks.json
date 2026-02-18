@@ -1,0 +1,80 @@
+{
+  "ranks": [
+    {
+      "id": "vip",
+      "displayName": "VIP",
+      "priority": 10,
+      "maxHomes": 10,
+      "homeSettings": {
+        "enabled": true,
+        "cooldownSeconds": 0,
+        "warmupSeconds": 0
+      },
+      "warpSettings": {
+        "enabled": true,
+        "cooldownSeconds": 0,
+        "warmupSeconds": 0
+      },
+      "spawnSettings": {
+        "enabled": true,
+        "cooldownSeconds": 0,
+        "warmupSeconds": 0
+      },
+      "backSettings": {
+        "enabled": true,
+        "cooldownSeconds": 0,
+        "warmupSeconds": 0
+      },
+      "tpaSettings": {
+        "enabled": true,
+        "cooldownSeconds": 0,
+        "warmupSeconds": 0,
+        "timeoutSeconds": 120
+      },
+      "rtpSettings": {
+        "enabled": true,
+        "cooldownSeconds": 60,
+        "warmupSeconds": 0
+      },
+      "grantedPermissions": []
+    },
+    {
+      "id": "default",
+      "displayName": "Default",
+      "priority": 0,
+      "maxHomes": 5,
+      "homeSettings": {
+        "enabled": true,
+        "cooldownSeconds": 60,
+        "warmupSeconds": 3
+      },
+      "warpSettings": {
+        "enabled": true,
+        "cooldownSeconds": 60,
+        "warmupSeconds": 3
+      },
+      "spawnSettings": {
+        "enabled": true,
+        "cooldownSeconds": 60,
+        "warmupSeconds": 3
+      },
+      "backSettings": {
+        "enabled": true,
+        "cooldownSeconds": 60,
+        "warmupSeconds": 3
+      },
+      "tpaSettings": {
+        "enabled": true,
+        "cooldownSeconds": 30,
+        "warmupSeconds": 0,
+        "timeoutSeconds": 60
+      },
+      "rtpSettings": {
+        "enabled": true,
+        "cooldownSeconds": 300,
+        "warmupSeconds": 5
+      },
+      "grantedPermissions": []
+    }
+  ]
+}

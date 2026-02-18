@@ -1,20 +1,22 @@
 {
-  "Group": "${plugin_group}",
-  "Name": "${plugin_name}",
-  "Version": "${plugin_version}",
-  "Description": "${plugin_description}",
-  "Authors": [
-    {
-      "Name": "${plugin_author}"
-    }
-  ],
-  "Website": "${plugin_website}",
-  "ServerVersion": "${server_version}",
-  "Dependencies": {},
-  "OptionalDependencies": {
-    "com.leclowndu93150:ChatCustomization": "*"
-  },
-  "DisabledByDefault": false,
-  "IncludesAssetPack": true,
-  "Main": "${plugin_main_entrypoint}",
+    "Group": "dev.hytalemodding",
+    "Name": "Hyssentials",
+    "Version": "3.0.0",
+    "Description": "idk",
+    "Authors": [
+        {
+            "Name": "i do not know"
+        }
+    ],
+    "Website": "later",
+    "DisabledByDefault": false,
+    "IncludesAssetPack": true,
+    "Dependencies": {
+        "Hytale:DamageModule": "*"
+    },
+    "OptionalDependencies": {
+        "com.leclowndu93150:ChatCustomization": "*"
+    },
+    "ServerVersion": "2026.02.18-f3b8fff95",
+    "Main": "dev.hytalemodding.hyssentials.HyssentialsPlugin"
 }
