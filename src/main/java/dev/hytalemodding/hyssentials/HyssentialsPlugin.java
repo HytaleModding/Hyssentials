@@ -50,6 +50,8 @@ import com.hypixel.hytale.server.core.event.events.player.AddPlayerToWorldEvent;
 import com.hypixel.hytale.server.core.event.events.player.DrainPlayerFromWorldEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
+
+import java.nio.file.Path;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -78,6 +80,28 @@ public class HyssentialsPlugin extends JavaPlugin {
 
     @Override
     protected void setup() {
+        Path dataDir = this.getDataDirectory();
+        Path oldDir = dataDir.getParent().resolve("com.leclowndu93150_Hyssentials");
+
+        if (oldDir.toFile().exists() && oldDir.toFile().isDirectory()) {
+            try {
+                java.nio.file.Files.createDirectories(dataDir);
+                java.io.File[] files = oldDir.toFile().listFiles();
+                if (files != null) {
+                    for (java.io.File file : files) {
+                        Path dest = dataDir.resolve(file.getName());
+                        if (!dest.toFile().exists()) {
+                            java.nio.file.Files.copy(file.toPath(), dest, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                            this.getLogger().at(Level.INFO).log("Migrated file: %s", file.getName());
+                        }
+                    }
+                }
+                this.getLogger().at(Level.INFO).log("Migration from legacy folder complete.");
+            } catch (Exception e) {
+                this.getLogger().at(Level.SEVERE).log("Failed to migrate config files: %s", e.getMessage());
+            }
+        }
+
         ConfigMigrator migrator = new ConfigMigrator(this.getDataDirectory(), this.getLogger());
         migrator.migrate();
 
