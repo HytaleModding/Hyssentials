@@ -2,6 +2,7 @@ package dev.hytalemodding.hyssentials.manager;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
@@ -25,6 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class TeleportWarmupManager {
     private static final double MOVEMENT_THRESHOLD = 0.5;
@@ -153,40 +155,33 @@ public class TeleportWarmupManager {
     ) {
         UUID playerUuid = playerRef.getUuid();
 
-        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
-        HeadRotation headRotation = store.getComponent(ref, HeadRotation.getComponentType());
-        if (transform != null) {
-            Vector3d currentPos = transform.getPosition().clone();
-            Vector3f currentRot = headRotation != null ? headRotation.getRotation().clone() : new Vector3f(0, 0, 0);
-            backManager.saveLocation(playerUuid, LocationData.from(currentWorld.getName(), currentPos, currentRot));
-        }
-
         World targetWorld = Universe.get().getWorld(destination.worldName());
         if (targetWorld == null) {
             targetWorld = currentWorld;
         }
 
         World finalWorld = targetWorld;
-        long chunkIndex = ChunkUtil.indexChunkFromBlock((int) destination.x(), (int) destination.z());
 
-        finalWorld.getChunkStore().getChunkReferenceAsync(chunkIndex, 0).thenAccept(chunkRef -> {
-            currentWorld.execute(() -> {
-                Teleport teleport = new Teleport(finalWorld, destination.toPosition(), destination.toBodyRotation())
+        currentWorld.execute(() -> {
+            TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+            HeadRotation headRotation = store.getComponent(ref, HeadRotation.getComponentType());
+            if (transform != null) {
+                Vector3d currentPos = transform.getPosition().clone();
+                Vector3f currentRot = headRotation != null ? headRotation.getRotation().clone() : new Vector3f(0, 0, 0);
+                backManager.saveLocation(playerUuid, LocationData.from(currentWorld.getName(), currentPos, currentRot));
+            }
+            Teleport teleport = new Teleport(finalWorld, destination.toPosition(), destination.toBodyRotation())
                     .setHeadRotation(destination.toHeadRotation());
-                store.addComponent(ref, Teleport.getComponentType(), teleport);
+            store.addComponent(ref, Teleport.getComponentType(), teleport);
 
-                cooldownManager.setCooldown(playerUuid, commandType);
+            cooldownManager.setCooldown(playerUuid, commandType);
 
-                String destName = displayName != null ? displayName : String.format("%.1f, %.1f, %.1f", destination.x(), destination.y(), destination.z());
-                playerRef.sendMessage(ChatUtil.parse(Messages.SUCCESS_TELEPORTED, destName));
+            String destName = displayName != null ? displayName : String.format("%.1f, %.1f, %.1f", destination.x(), destination.y(), destination.z());
+            playerRef.sendMessage(ChatUtil.parse(Messages.SUCCESS_TELEPORTED, destName));
 
-                if (onComplete != null) {
-                    onComplete.run();
-                }
-            });
-        }).exceptionally(ex -> {
-            playerRef.sendMessage(ChatUtil.parse(Messages.ERROR_CHUNK_LOAD_FAILED));
-            return null;
+            if (onComplete != null) {
+                onComplete.run();
+            }
         });
     }
 

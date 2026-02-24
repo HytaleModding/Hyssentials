@@ -73,6 +73,9 @@ public class TpacceptCommand extends AbstractPlayerCommand {
             }
             Vector3d targetPos = targetTransform.getPosition().clone();
             Vector3f targetRot = targetHeadRot != null ? targetHeadRot.getRotation().clone() : new Vector3f(0, 0, 0);
+            if (world != senderWorld) {
+
+            }
             LocationData destination = new LocationData(world.getName(), targetPos.getX(), targetPos.getY(), targetPos.getZ(), targetRot.getPitch(), targetRot.getYaw());
 
             TpaSettings senderSettings = rankManager.getEffectiveTpaSettings(senderPlayer);
