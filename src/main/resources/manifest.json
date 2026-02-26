@@ -1,7 +1,7 @@
 {
     "Group": "dev.hytalemodding",
     "Name": "Hyssentials",
-    "Version": "3.0.0",
+    "Version": "3.1",
     "Description": "Essential commands for Hytale servers - TPA, homes, warps, spawn and more!",
     "Authors": [
         {

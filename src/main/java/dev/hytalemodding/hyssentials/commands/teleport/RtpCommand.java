@@ -8,6 +8,8 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayer
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.hytalemodding.hyssentials.data.CommandSettings;
 import dev.hytalemodding.hyssentials.data.LocationData;
@@ -147,9 +149,9 @@ public class RtpCommand extends AbstractPlayerCommand {
             int blockAbove = chunk.getBlock(localX, y + 1, localZ);
 
             if (blockBelow != 0 && blockAt == 0 && blockAbove == 0) {
-                int fluidAtFeet = chunk.getFluidId(localX, y, localZ);
-                int fluidAtHead = chunk.getFluidId(localX, y + 1, localZ);
-                int fluidBelow = chunk.getFluidId(localX, y - 1, localZ);
+                int fluidAtFeet = isFluid(localX, y, localZ, chunk.getWorld().getChunkStore());
+                int fluidAtHead = isFluid(localX, y + 1, localZ, chunk.getWorld().getChunkStore());
+                int fluidBelow = isFluid(localX, y - 1, localZ, chunk.getWorld().getChunkStore());
 
                 if (fluidAtFeet != 0 || fluidAtHead != 0 || fluidBelow != 0) {
                     continue;
@@ -171,5 +173,15 @@ public class RtpCommand extends AbstractPlayerCommand {
         }
 
         return null;
+    }
+
+    private Integer isFluid(int x, int y, int z, ChunkStore chunkStore) {
+        int chunkX = ChunkUtil.chunkCoordinate(x);
+        int sectionY = ChunkUtil.indexSection(y);
+        int chunkZ = ChunkUtil.chunkCoordinate(z);
+        int blockIndex = ChunkUtil.indexBlock(x, y, z);
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReference(chunkX, sectionY, chunkZ);
+        FluidSection fluidSection = chunkStore.getStore().getComponent(sectionRef, FluidSection.getComponentType());
+        return fluidSection.getFluidId(blockIndex);
     }
 }

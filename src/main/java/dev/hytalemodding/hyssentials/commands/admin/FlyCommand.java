@@ -2,9 +2,11 @@ package dev.hytalemodding.hyssentials.commands.admin;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.entity.entities.player.movement.MovementManager;
+import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -36,6 +38,14 @@ public class FlyCommand extends AbstractPlayerCommand {
         boolean currentlyCanFly = movementManager.getSettings().canFly;
         movementManager.getSettings().canFly = !currentlyCanFly;
         movementManager.update(playerRef.getPacketHandler());
+
+        MovementStatesComponent states = (MovementStatesComponent) store.getComponent(ref, MovementStatesComponent.getComponentType());
+        if (states == null) {
+            return;
+        }
+        MovementStates newStates = states.getMovementStates().clone();
+        newStates.flying = false;
+        states.setSentMovementStates(newStates);
 
         if (!currentlyCanFly) {
             context.sendMessage(ChatUtil.parse(Messages.SUCCESS_FLY_ENABLED));
